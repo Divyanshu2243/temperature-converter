@@ -2,47 +2,47 @@
 <html>
 <head>
     <style>
-        
-    body {
-        background-color: lightblue;
-    }
-    .container {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    h1 {
-        text-align: center;
-    }
-    select, input, button {
-        width: 100%;
-        margin: 5px 0;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    button {
-        background-color: #008CBA;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #005A80;
-    }
-    #result {
-        font-size: 24px;
-        text-align: center;
-        margin-top: 10px;
-    }
-</style>
-
+        body {
+            background-color: lightblue;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        select, input, button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #008CBA;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005A80;
+        }
+        table {
+            width: 100%;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -54,26 +54,51 @@
             <option value="kelvin">Kelvin</option>
         </select>
         <button onclick="convertTemperature()">Convert</button>
-        <div id="result"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Celsius (°C)</th>
+                    <th>Fahrenheit (°F)</th>
+                    <th>Kelvin (K)</th>
+                </tr>
+            </thead>
+            <tbody id="result">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     
     <script>
         function convertTemperature() {
-            const temperatureInput = document.getElementById('temperature').value;
+            const temperatureInput = parseFloat(document.getElementById('temperature').value);
             const unit = document.getElementById('unit').value;
             const resultElement = document.getElementById('result');
-            let convertedTemperature;
+            let convertedCelsius, convertedFahrenheit, convertedKelvin;
 
             if (unit === 'celsius') {
-                convertedTemperature = (temperatureInput * 9/5) + 32;
-                resultElement.innerHTML = `Converted Temperature: ${convertedTemperature} °F`;
+                convertedCelsius = temperatureInput;
+                convertedFahrenheit = (temperatureInput * 9/5) + 32;
+                convertedKelvin = temperatureInput + 273.15;
             } else if (unit === 'fahrenheit') {
-                convertedTemperature = (temperatureInput - 32) * 5/9;
-                resultElement.innerHTML = `Converted Temperature: ${convertedTemperature} °C`;
+                convertedCelsius = (temperatureInput - 32) * 5/9;
+                convertedFahrenheit = temperatureInput;
+                convertedKelvin = (temperatureInput - 32) * 5/9 + 273.15;
             } else if (unit === 'kelvin') {
-                convertedTemperature = parseFloat(temperatureInput) + 273.15;
-                resultElement.innerHTML = `Converted Temperature: ${convertedTemperature} K`;
+                convertedCelsius = temperatureInput - 273.15;
+                convertedFahrenheit = (temperatureInput - 273.15) * 9/5 + 32;
+                convertedKelvin = temperatureInput;
             }
+
+            const tableRow = resultElement.querySelector('tr');
+            tableRow.innerHTML = `
+                <td>${convertedCelsius.toFixed(2)} °C</td>
+                <td>${convertedFahrenheit.toFixed(2)} °F</td>
+                <td>${convertedKelvin.toFixed(2)} K</td>
+            `;
         }
     </script>
 </body>
